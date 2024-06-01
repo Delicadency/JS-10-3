@@ -21,6 +21,10 @@ const createButton = () => {
   return button;
 };
 const getCurrencyList = createButton();
+const errorInfo = document.createElement("p");
+errorInfo.innerText =
+  "Wystąpił błąd podczas pobierania danych. Spróbuj ponownie później.";
+
 getCurrencyList.addEventListener("click", () => {
   const apiURL = "https://api.frankfurter.app/latest";
   getCurrencyList.disabled = true;
@@ -36,7 +40,7 @@ getCurrencyList.addEventListener("click", () => {
         container.appendChild(label);
         const select = document.createElement("select");
         select.id = "currency-select";
-        for (const [currency, rate] of Object.entries(rates)) {
+        for (const [currency] of Object.entries(rates)) {
           const option = document.createElement("option");
           option.value = currency;
           option.innerText = currency;
@@ -55,7 +59,11 @@ getCurrencyList.addEventListener("click", () => {
           rateInfo.innerText = `1 EUR kosztuje ${selectedRate} ${selectedCurrency}.`;
         });
       } else {
+        container.appendChild(errorInfo);
       }
     })
-    .catch((err) => console.error(err));
+    .catch((err) => {
+      console.error(err);
+      container.appendChild(errorInfo);
+    });
 });
