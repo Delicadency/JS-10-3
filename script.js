@@ -8,12 +8,21 @@ const createButton = () => {
   button.id = "getCurrencies";
   button.innerText = "Pobierz waluty";
   document.body.appendChild(button);
+  return button;
 };
 const getCurrencyList = createButton();
 getCurrencyList.addEventListener("click", () => {
   const apiURL = "https://api.frankfurter.app/latest";
   fetch(apiURL)
-    .then((response) => response.json)
-    .then((data) => console.log(data))
-    .catch((err) => console.error(err));
+    .then((response) => response.json())
+    .then((data) => {console.log(data);
+        const rates = data?.[0]?.rates;
+        if (rates){
+            const select = document.body.createElement("select");
+            select.id = "currency-select";
+            document.body.appendChild(select);
+
+        }
+    })
+    .catch((err) => console.error(err))
 });
