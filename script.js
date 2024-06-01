@@ -23,10 +23,11 @@ const createButton = () => {
 const getCurrencyList = createButton();
 getCurrencyList.addEventListener("click", () => {
   const apiURL = "https://api.frankfurter.app/latest";
+  getCurrencyList.disabled = true;
   fetch(apiURL)
     .then((response) => response.json())
     .then((data) => {
-      const rates = data.rates;
+      const rates = data?.rates;
       if (rates) {
         const label = document.createElement("label");
         label.setAttribute("for", "currency-select");
@@ -35,7 +36,7 @@ getCurrencyList.addEventListener("click", () => {
         container.appendChild(label);
         const select = document.createElement("select");
         select.id = "currency-select";
-        for (const [currency] of Object.entries(rates)) {
+        for (const [currency, rate] of Object.entries(rates)) {
           const option = document.createElement("option");
           option.value = currency;
           option.innerText = currency;
@@ -43,6 +44,17 @@ getCurrencyList.addEventListener("click", () => {
           select.appendChild(option);
         }
         container.appendChild(select);
+
+        const rateInfo = document.createElement("p");
+        rateInfo.id = "rate-info";
+        container.appendChild(rateInfo);
+
+        select.addEventListener("change", (event) => {
+          const selectedCurrency = event.target.value;
+          const selectedRate = rates[selectedCurrency];
+          rateInfo.innerText = `1 EUR kosztuje ${selectedRate} ${selectedCurrency}.`;
+        });
+      } else {
       }
     })
     .catch((err) => console.error(err));
