@@ -23,12 +23,12 @@ errorInfo.innerText =
 
 getCurrencyList.addEventListener("click", () => {
   const apiURL = "https://api.frankfurter.app/latest";
-  getCurrencyList.disabled = true;
   fetch(apiURL)
     .then((response) => response.json())
     .then((data) => {
       const rates = data?.rates;
       if (rates) {
+        getCurrencyList.disabled = true;
         const label = document.createElement("label");
         label.setAttribute("for", "currency-select");
         label.innerText = "Wybierz walutę";
